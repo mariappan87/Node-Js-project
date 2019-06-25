@@ -10,5 +10,5 @@ function getAllUsers(req, res, next) {
 }
 
 module.exports = {
-    getUserCollection: getAllUsers
+    getAllUsers: getAllUsers
 }
