@@ -9,7 +9,6 @@ let usersRouter = require('./routes/users');
 
 let app = express();
 
-var db = require('./dao/connection.dao');
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
