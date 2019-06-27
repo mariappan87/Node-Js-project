@@ -7,9 +7,8 @@
 var app = require('../app');
 var debug = require('debug')('myapp:server');
 var http = require('http');
-var log4js = require("log4js");
-var logger = log4js.getLogger("app");
-
+let log4js = require("log4js");
+let Logger = log4js.getLogger("app");
 log4js.configure('./config/log4js.json')
 /**
  * Get port from environment and store in Express.
@@ -90,6 +89,6 @@ function onListening() {
     ? 'pipe ' + addr
     : 'port ' + addr.port;
   debug('Listening on ' + bind);
-  logger.info("Server started and listening on "+port);
+  Logger.info("Server started and listening on "+port);
 }
 module.exports = server;

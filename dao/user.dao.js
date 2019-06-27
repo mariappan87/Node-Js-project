@@ -1,13 +1,11 @@
 var db = require('./connection.dao');
-var Users = require('../model/user.model');
+var Users = require('../middleware/user.schema');
 async function findUser(name) {
     return await Users.findOne({username:name});
 }
-async function create(user) {
-    let userObj = new Users(user);
-    return await userObj.save();
+async function create(user) {    
+    return await user.save();
 }
-
 
 async function getById(id) {
     return await Users.findById(id);
@@ -17,6 +15,7 @@ async function deleteById(id) {
 }
 
 module.exports = {
+    Users,
     create,
     findUser,
     getById,

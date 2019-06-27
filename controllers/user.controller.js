@@ -6,7 +6,7 @@ function authenticate(req, res, next) {
         if(result.data) {
             res.render("home",{message:result.data});
         } else {
-            res.render("index",{error:result.error})
+            res.render("index",{error:result.error});
         }        
     })
     .catch(err=>next(err));
@@ -14,11 +14,17 @@ function authenticate(req, res, next) {
 
 function createUser(req, res, next) {
     userService.create(req.body)
-    .then((result) => {  
-        console.log("===>",result)     
-        res.render("home");
+    .then((result) => {
+        if(result.error) {
+            res.render("index",{error:result.error});  
+        } else {
+            res.render("home",{message:result}); 
+        }
+                 
     })
-    .catch(err=>next(err));
+    .catch(err=> {
+        res.render("error", {message:err.message, error:err});
+    });
 }
 
 module.exports = {

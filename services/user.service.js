@@ -1,4 +1,5 @@
 const DAO = require('../dao/user.dao.js');
+const bcrypt = require('bcryptjs');
 
 module.exports = {
     authenticate,
@@ -10,7 +11,7 @@ module.exports = {
 async function authenticate(data) {
     var existingUser = await DAO.findUser(data.username);
     if(existingUser) {
-        if(existingUser.password===data.password) {
+        if(bcrypt.compareSync(data.password,existingUser.password)) {
             return {                
                 data: existingUser
             }
@@ -27,7 +28,21 @@ async function authenticate(data) {
 }
 
 async function create(user) {
-    return await DAO.create(user);
+    var existingUser = await DAO.findUser(user.username);
+    if(existingUser) {
+        return {
+            error: `Username ${user.username} is already registered`
+        }
+    } else {
+        let userObj = new DAO.Users(user);
+        let error = userObj.validateSync();
+        console.log("error====>", error);
+        if(error) {
+            throw error;
+        }
+        userObj.password = bcrypt.hashSync(user.password,10);
+        return await DAO.create(userObj);
+    }    
 }
 
 async function getById(id) {
